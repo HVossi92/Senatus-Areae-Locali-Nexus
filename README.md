@@ -1,6 +1,6 @@
 # Senatus Areae Locali Nexus
 
-A Roman Senate themed todo application built with Go, a-h/templ, HTMX, and Bootstrap 5.
+A Roman Senate themed todo application built with Go, a-h/templ, HTMX, Bootstrap 5, and SQLite.
 
 ## Description
 
@@ -14,6 +14,7 @@ A Roman Senate themed todo application built with Go, a-h/templ, HTMX, and Boots
 - Filter tasks by status or priority
 - Single-page application-like experience with HTMX
 - Roman-inspired UI with scrolls, marble, and ancient iconography
+- Persistent storage with SQLite database
 
 ## Technologies
 
@@ -21,11 +22,13 @@ A Roman Senate themed todo application built with Go, a-h/templ, HTMX, and Boots
 - **Templating**: a-h/templ for type-safe HTML templates
 - **Frontend Enhancement**: HTMX for dynamic interactions
 - **Styling**: Bootstrap 5 with custom Roman-themed CSS
+- **Database**: SQLite for persistent storage
 
 ## Prerequisites
 
 - Go 1.22 or newer
 - a-h/templ CLI tool
+- SQLite (automatically included via Go SQLite driver)
 
 ## Setup
 
@@ -63,6 +66,7 @@ A Roman Senate themed todo application built with Go, a-h/templ, HTMX, and Boots
 - `/components`: Templ components for UI rendering
 - `/models`: Data models and repository implementation
 - `/static`: Static assets (CSS, images)
+- `/data`: SQLite database storage location (created on first run)
 
 ## Usage
 
@@ -72,6 +76,10 @@ A Roman Senate themed todo application built with Go, a-h/templ, HTMX, and Boots
 - **Delete Task**: Use the fire icon to remove a task from the agenda
 - **Filter Tasks**: Use the dropdown menus to filter by Status or Priority
 - **Change Status**: On the task detail page, use the action buttons to change the status
+
+## Data Persistence
+
+Tasks are stored in a SQLite database located in the `data/senatus.db` file. This ensures your tasks persist between application restarts. Sample tasks are seeded on initial startup if the database is empty.
 
 ## License
 

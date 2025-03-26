@@ -14,11 +14,34 @@ import (
 	"github.com/a-h/templ"
 )
 
+// Global repository
 var todoRepo models.Repository
 
 func main() {
-	// Initialize repository with sample data
-	todoRepo = models.NewInMemoryRepository()
+	// Setup SQLite database in the data directory
+	dataDir := "data"
+	if err := os.MkdirAll(dataDir, 0755); err != nil {
+		log.Fatalf("Failed to create data directory: %v", err)
+	}
+
+	dbPath := filepath.Join(dataDir, "senatus.db")
+	repo, err := models.NewSQLiteRepository(dbPath)
+	if err != nil {
+		log.Fatalf("Failed to create repository: %v", err)
+	}
+
+	// Initialize repository
+	todoRepo = repo
+
+	// Ensure the database has initial data
+	if sqliteRepo, ok := todoRepo.(*models.SQLiteRepository); ok {
+		if err := sqliteRepo.SeedInitialData(); err != nil {
+			log.Printf("Warning: Failed to seed initial data: %v", err)
+		}
+
+		// Ensure we close the database connection when the server shuts down
+		defer sqliteRepo.Close()
+	}
 
 	// Create new Go 1.22 ServeMux
 	mux := http.NewServeMux()
