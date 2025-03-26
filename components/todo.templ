@@ -1,0 +1,342 @@
+package components
+
+import (
+	"fmt"
+	"senatus/models"
+	"time"
+)
+
+// Helper function to get status display name and CSS class
+func getStatusInfo(status models.Status) (string, string) {
+	switch status {
+	case models.Proposed:
+		return "Proposita", "proposed"
+	case models.Approved:
+		return "Probata", "approved"
+	case models.InProgress:
+		return "In Processu", "in-progress"
+	case models.Completed:
+		return "Completa", "completed"
+	case models.Vetoed:
+		return "Intercessio", "vetoed"
+	default:
+		return string(status), "unknown"
+	}
+}
+
+// Helper function to get priority display name
+func getPriorityName(priority int) string {
+	switch priority {
+	case 1:
+		return "Maxima"
+	case 2:
+		return "Alta"
+	case 3:
+		return "Media"
+	case 4:
+		return "Humilis"
+	case 5:
+		return "Minima"
+	default:
+		return fmt.Sprintf("Prioritas %d", priority)
+	}
+}
+
+// HomePage displays the list of todos
+templ HomePage(todos []models.Todo) {
+	@Layout("Tabularium") {
+		<div class="senate-intro mb-4">
+			<h2 class="roman-heading">Tabularium Negotiorum</h2>
+			<p class="senate-decree">By decree of the Senate and People of Rome, all matters of state shall be organized herein.</p>
+		</div>
+		
+		@TodoList(todos)
+	}
+}
+
+// TodoList renders a list of todos
+templ TodoList(todos []models.Todo) {
+	<div class="row" id="todo-list">
+		if len(todos) == 0 {
+			<div class="col-12">
+				<div class="empty-state">
+					<div class="scroll-message">
+						<p class="roman-message">No tasks found in the Senate archives.</p>
+						<p><a href="/new" class="btn btn-primary btn-senate">Propose New Task</a></p>
+					</div>
+				</div>
+			</div>
+		} else {
+			for _, todo := range todos {
+				<div class="col-md-6 col-lg-4 mb-4" id={ "todo-" + todo.ID }>
+					@TodoCard(todo)
+				</div>
+			}
+		}
+	</div>
+}
+
+// TodoCard renders a single todo card
+templ TodoCard(todo models.Todo) {
+	<div class="card todo-card">
+		<div class="card-header">
+			<div class="d-flex justify-content-between align-items-center">
+				<span class="todo-priority">{ getPriorityName(todo.Priority) }</span>
+				@StatusBadge(todo.Status)
+			</div>
+		</div>
+		<div class="card-body">
+			<h5 class="card-title todo-title">{ todo.Title }</h5>
+			<p class="card-text todo-description">{ todo.Description }</p>
+			<p class="sponsor-info"><em>Proposed by: { todo.Sponsor }</em></p>
+			<div class="todo-dates">
+				<small>Proposed: { formatDate(todo.CreatedAt) }</small>
+				if todo.UpdatedAt != todo.CreatedAt {
+					<br/>
+					<small>Updated: { formatDate(todo.UpdatedAt) }</small>
+				}
+			</div>
+		</div>
+		<div class="card-footer">
+			<div class="d-flex justify-content-between">
+				<a href={ templ.SafeURL("/view/" + todo.ID) } class="btn btn-outline-primary btn-sm senate-btn">
+					<i class="fas fa-scroll"></i> View
+				</a>
+				<a href={ templ.SafeURL("/edit/" + todo.ID) } class="btn btn-outline-secondary btn-sm senate-btn">
+					<i class="fas fa-stylus"></i> Edit
+				</a>
+				<button 
+					hx-delete={ "/todo/" + todo.ID }
+					hx-confirm="Are you sure you wish to remove this task from the Senate's agenda?"
+					hx-target={ "#todo-" + todo.ID } 
+					hx-swap="outerHTML"
+					class="btn btn-outline-danger btn-sm senate-btn">
+					<i class="fas fa-fire"></i> Delete
+				</button>
+			</div>
+		</div>
+	</div>
+}
+
+// StatusBadge renders a badge for the todo status
+templ StatusBadge(status models.Status) {
+	@statusBadgeWithClass(status, "")
+}
+
+// StatusBadge with additional class
+templ statusBadgeWithClass(status models.Status, additionalClass string) {
+	if displayName, cssClass := getStatusInfo(status); true {
+		<span class={ "status-badge", cssClass, additionalClass }>{ displayName }</span>
+	}
+}
+
+// Single Todo Detail View
+templ TodoDetail(todo models.Todo) {
+	@Layout("Task Details") {
+		<div class="todo-detail">
+			<div class="detail-header mb-4">
+				<div class="d-flex justify-content-between align-items-center">
+					<h2 class="roman-heading">{ todo.Title }</h2>
+					@statusBadgeWithClass(todo.Status, "status-badge-lg")
+				</div>
+				<p class="sponsor-info-lg mt-2">Proposed by: { todo.Sponsor }</p>
+			</div>
+			
+			<div class="detail-body">
+				<div class="scroll-parchment mb-4">
+					<div class="parchment-content">
+						<p class="todo-description-lg">{ todo.Description }</p>
+					</div>
+				</div>
+				
+				<div class="detail-meta">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="meta-item">
+								<span class="meta-label">Priority:</span>
+								<span class="meta-value">{ getPriorityName(todo.Priority) }</span>
+							</div>
+							<div class="meta-item">
+								<span class="meta-label">Proposed:</span>
+								<span class="meta-value">{ formatDate(todo.CreatedAt) }</span>
+							</div>
+							<div class="meta-item">
+								<span class="meta-label">Last Updated:</span>
+								<span class="meta-value">{ formatDate(todo.UpdatedAt) }</span>
+							</div>
+						</div>
+						
+						<div class="col-md-6">
+							<div class="status-actions mt-3 mt-md-0">
+								@StatusChangeButtons(todo)
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="detail-actions mt-4">
+				<div class="d-flex justify-content-between">
+					<a href="/" class="btn btn-outline-secondary senate-btn">
+						<i class="fas fa-arrow-left"></i> Return to Tabularium
+					</a>
+					
+					<div class="action-buttons">
+						<a href={ templ.SafeURL("/edit/" + todo.ID) } class="btn btn-outline-primary senate-btn me-2">
+							<i class="fas fa-stylus"></i> Edit Task
+						</a>
+						<button 
+							hx-delete={ "/todo/" + todo.ID }
+							hx-confirm="Are you sure you wish to remove this task from the Senate's agenda?"
+							hx-push-url="true"
+							hx-target="body"
+							hx-swap="outerHTML"
+							class="btn btn-outline-danger senate-btn">
+							<i class="fas fa-fire"></i> Delete Task
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	}
+}
+
+// Status change buttons
+templ StatusChangeButtons(todo models.Todo) {
+	<div class="status-buttons" id="status-buttons">
+		if todo.Status != models.Approved && todo.Status != models.Completed && todo.Status != models.Vetoed {
+			<button 
+				hx-put={ "/todo/" + todo.ID + "/status" }
+				hx-vals={ fmt.Sprintf(`{"status": "%s"}`, models.Approved) }
+				hx-target="#status-buttons"
+				hx-swap="outerHTML"
+				class="btn btn-success senate-btn mb-2 w-100">
+				<i class="fas fa-check"></i> Approve
+			</button>
+		}
+		
+		if todo.Status != models.InProgress && todo.Status != models.Completed && todo.Status != models.Vetoed {
+			<button 
+				hx-put={ "/todo/" + todo.ID + "/status" }
+				hx-vals={ fmt.Sprintf(`{"status": "%s"}`, models.InProgress) }
+				hx-target="#status-buttons"
+				hx-swap="outerHTML"
+				class="btn btn-primary senate-btn mb-2 w-100">
+				<i class="fas fa-tasks"></i> Mark In Progress
+			</button>
+		}
+		
+		if todo.Status != models.Completed {
+			<button 
+				hx-put={ "/todo/" + todo.ID + "/status" }
+				hx-vals={ fmt.Sprintf(`{"status": "%s"}`, models.Completed) }
+				hx-target="#status-buttons"
+				hx-swap="outerHTML"
+				class="btn btn-info senate-btn mb-2 w-100">
+				<i class="fas fa-trophy"></i> Mark Complete
+			</button>
+		}
+		
+		if todo.Status != models.Vetoed && todo.Status != models.Completed {
+			<button 
+				hx-put={ "/todo/" + todo.ID + "/status" }
+				hx-vals={ fmt.Sprintf(`{"status": "%s"}`, models.Vetoed) }
+				hx-target="#status-buttons"
+				hx-swap="outerHTML"
+				class="btn btn-danger senate-btn mb-2 w-100">
+				<i class="fas fa-ban"></i> Veto
+			</button>
+		}
+	</div>
+}
+
+// New Task Form
+templ NewTaskForm(todo models.Todo) {
+	@Layout("New Task") {
+		<div class="form-container">
+			<h2 class="roman-heading mb-4">Nova Propositio</h2>
+			<p class="senate-decree mb-4">Propose a new matter for the Senate's consideration.</p>
+			
+			@TaskForm(todo, "/todo", "POST", "Propose to the Senate")
+		</div>
+	}
+}
+
+// Edit Task Form
+templ EditTaskForm(todo models.Todo) {
+	@Layout("Edit Task") {
+		<div class="form-container">
+			<h2 class="roman-heading mb-4">Emendatio Propositionis</h2>
+			<p class="senate-decree mb-4">Amend the details of this proposal for the Senate's consideration.</p>
+			
+			@TaskForm(todo, "/todo/" + todo.ID, "PUT", "Update Proposal")
+		</div>
+	}
+}
+
+// Generic Task Form
+templ TaskForm(todo models.Todo, action string, method string, submitText string) {
+	<form id="task-form" hx-target="body" hx-push-url="true" hx-swap="outerHTML" class="senate-form">
+		if method == "POST" {
+			<div hx-post={ action }></div>
+		} else if method == "PUT" {
+			<div hx-put={ action }></div>
+		}
+		<input type="hidden" name="id" value={ todo.ID }/>
+		
+		<div class="mb-3">
+			<label for="title" class="form-label">Title</label>
+			<input type="text" class="form-control" id="title" name="title" value={ todo.Title } required/>
+		</div>
+		
+		<div class="mb-3">
+			<label for="description" class="form-label">Description</label>
+			<textarea class="form-control" id="description" name="description" rows="5" required>{ todo.Description }</textarea>
+		</div>
+		
+		<div class="row">
+			<div class="col-md-6 mb-3">
+				<label for="priority" class="form-label">Priority (Gravitas)</label>
+				<select class="form-control" id="priority" name="priority">
+					<option value="1" selected?={ todo.Priority == 1 }>Maxima (Highest)</option>
+					<option value="2" selected?={ todo.Priority == 2 }>Alta (High)</option>
+					<option value="3" selected?={ todo.Priority == 3 }>Media (Medium)</option>
+					<option value="4" selected?={ todo.Priority == 4 }>Humilis (Low)</option>
+					<option value="5" selected?={ todo.Priority == 5 }>Minima (Lowest)</option>
+				</select>
+			</div>
+			
+			<div class="col-md-6 mb-3">
+				<label for="sponsor" class="form-label">Sponsor (Your Title and Name)</label>
+				<input type="text" class="form-control" id="sponsor" name="sponsor" value={ todo.Sponsor } placeholder="Senator Julius Caesar" required/>
+			</div>
+		</div>
+		
+		if method == "PUT" {
+			<div class="mb-3">
+				<label for="status" class="form-label">Status</label>
+				<select class="form-control" id="status" name="status">
+					<option value="PROPOSED" selected?={ todo.Status == models.Proposed }>Proposita (Proposed)</option>
+					<option value="APPROVED" selected?={ todo.Status == models.Approved }>Probata (Approved)</option>
+					<option value="IN_PROGRESS" selected?={ todo.Status == models.InProgress }>In Processu (In Progress)</option>
+					<option value="COMPLETED" selected?={ todo.Status == models.Completed }>Completa (Completed)</option>
+					<option value="VETOED" selected?={ todo.Status == models.Vetoed }>Intercessio (Vetoed)</option>
+				</select>
+			</div>
+		}
+		
+		<div class="form-actions">
+			<a href="/" class="btn btn-outline-secondary senate-btn me-2">
+				<i class="fas fa-times"></i> Cancel
+			</a>
+			<button type="submit" class="btn btn-primary senate-btn">
+				<i class="fas fa-scroll"></i> { submitText }
+			</button>
+		</div>
+	</form>
+}
+
+// Format date in a Roman-inspired way
+func formatDate(date time.Time) string {
+	return date.Format("II Kalends of January, 2006")
+} 

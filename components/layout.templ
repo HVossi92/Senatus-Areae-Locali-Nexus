@@ -1,0 +1,136 @@
+package components
+
+import (
+	"time"
+	"strconv"
+)
+
+templ Layout(title string) {
+	<!DOCTYPE html>
+	<html lang="en">
+		<head>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<title>{ title } - Senatus Areae Locali Nexus</title>
+			<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
+			<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+			<script src="https://cdn.jsdelivr.net/npm/htmx.org@1.9.6"></script>
+			<link rel="stylesheet" href="/static/css/styles.css"/>
+			<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+		</head>
+		<body>
+			<div class="container-fluid p-0">
+				<header class="senate-header text-center py-4">
+					<div class="row align-items-center">
+						<div class="col-md-2">
+							<img src="/static/img/roman-eagle.svg" alt="Roman Eagle" class="senate-logo" onerror="this.src='/static/img/roman-eagle.png'; this.onerror=null;"/>
+						</div>
+						<div class="col-md-8">
+							<h1 class="senate-title">SENATVS·AREAE·LOCALI·NEXVS</h1>
+							<p class="senate-subtitle">The Task Management System of the Roman Senate</p>
+						</div>
+						<div class="col-md-2">
+							<div class="current-date">
+								<div class="roman-date">{ romanDate() }</div>
+								<div class="modern-date">{ time.Now().Format("January 2, 2006") }</div>
+							</div>
+						</div>
+					</div>
+				</header>
+				
+				<nav class="navbar navbar-expand-lg navbar-dark senate-navbar">
+					<div class="container-fluid">
+						<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSenate">
+							<span class="navbar-toggler-icon"></span>
+						</button>
+						<div class="collapse navbar-collapse" id="navbarSenate">
+							<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+								<li class="nav-item">
+									<a class="nav-link" href="/">Tabularium (Home)</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="/new">Nova Propositio (New Task)</a>
+								</li>
+								<li class="nav-item dropdown">
+									<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+										Status Rerum (Task Status)
+									</a>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="/filter/status/PROPOSED">Proposita (Proposed)</a></li>
+										<li><a class="dropdown-item" href="/filter/status/APPROVED">Probata (Approved)</a></li>
+										<li><a class="dropdown-item" href="/filter/status/IN_PROGRESS">In Processu (In Progress)</a></li>
+										<li><a class="dropdown-item" href="/filter/status/COMPLETED">Completa (Completed)</a></li>
+										<li><a class="dropdown-item" href="/filter/status/VETOED">Intercessio (Vetoed)</a></li>
+									</ul>
+								</li>
+								<li class="nav-item dropdown">
+									<a class="nav-link dropdown-toggle" href="#" id="priorityDropdown" role="button" data-bs-toggle="dropdown">
+										Gravitas (Priority)
+									</a>
+									<ul class="dropdown-menu">
+										<li><a class="dropdown-item" href="/filter/priority/1">Maxima (Highest)</a></li>
+										<li><a class="dropdown-item" href="/filter/priority/2">Alta (High)</a></li>
+										<li><a class="dropdown-item" href="/filter/priority/3">Media (Medium)</a></li>
+										<li><a class="dropdown-item" href="/filter/priority/4">Humilis (Low)</a></li>
+										<li><a class="dropdown-item" href="/filter/priority/5">Minima (Lowest)</a></li>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+				
+				<main class="senate-main py-4">
+					<div class="container">
+						<div class="roman-scroll">
+							<div class="scroll-content">
+								{ children... }
+							</div>
+						</div>
+					</div>
+				</main>
+				
+				<footer class="senate-footer text-center py-3 mt-4">
+					<div class="container">
+						<p class="senate-footer-text mb-0">SPQR · Senatus Populusque Romanus · { strconv.Itoa(time.Now().Year()) }</p>
+					</div>
+				</footer>
+			</div>
+		</body>
+	</html>
+}
+
+// Helper function to generate a Roman-style date
+func romanDate() string {
+	months := []string{
+		"Ianuarius", "Februarius", "Martius", "Aprilis", "Maius", "Iunius",
+		"Iulius", "Augustus", "September", "October", "November", "December",
+	}
+	
+	now := time.Now()
+	month := months[now.Month()-1]
+	day := now.Day()
+	
+	// Simplified Roman numeral day
+	var romanDay string
+	switch {
+	case day == 1:
+		romanDay = "Kalendis"
+	case day <= 4:
+		romanDay = "IV"
+	case day <= 9:
+		romanDay = "IX"
+	case day <= 14:
+		romanDay = "XIV"
+	case day <= 19:
+		romanDay = "XIX"
+	case day <= 24:
+		romanDay = "XXIV"
+	case day <= 29:
+		romanDay = "XXIX"
+	default:
+		romanDay = "XXX"
+	}
+	
+	return romanDay + " " + month
+} 
