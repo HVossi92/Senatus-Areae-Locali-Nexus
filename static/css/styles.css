@@ -1,0 +1,566 @@
+/* Roman Senate Theme - Custom CSS */
+
+:root {
+  --roman-red: #8e1600;
+  --roman-gold: #d4af37;
+  --roman-marble: #f5f3e6;
+  --roman-dark: #2c2c2c;
+  --roman-stone: #c0b9a3;
+  --roman-papyrus: #f0e6c9;
+  --roman-shadow: rgba(0, 0, 0, 0.2);
+  --roman-laurel: #5a6e3a;
+  --roman-earth: #8c7355;
+  --roman-shadow: rgba(0, 0, 0, 0.25);
+}
+
+body {
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  background-color: var(--roman-marble);
+  color: var(--roman-dark);
+}
+
+/* Header Styling */
+.senate-header {
+  background-color: var(--roman-red);
+  color: white;
+  padding: 1.5rem 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 10px var(--roman-shadow);
+}
+
+.senate-header::before,
+.senate-header::after {
+  content: "";
+  position: absolute;
+  width: 200px;
+  height: 100%;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23d4af37" d="M12 2L9 9H2l5.5 4-2.1 7L12 16l6.6 4-2.1-7L22 9h-7z"/></svg>');
+  background-repeat: repeat;
+  background-position: center;
+  opacity: 0.1;
+}
+
+.senate-header::before {
+  left: 0;
+  transform: rotate(-5deg);
+}
+
+.senate-header::after {
+  right: 0;
+  transform: rotate(5deg);
+}
+
+.senate-logo {
+  width: 80px;
+  height: auto;
+  filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+}
+
+.senate-title {
+  font-family: 'Trajan Pro', 'Times New Roman', serif;
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+  margin-bottom: 0.5rem;
+  text-shadow: 2px 2px 4px var(--roman-shadow);
+  color: var(--roman-gold);
+}
+
+.senate-subtitle {
+  font-style: italic;
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.current-date {
+  border: 1px solid var(--roman-gold);
+  padding: 8px;
+  border-radius: 3px;
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.roman-date {
+  font-family: 'Trajan Pro', 'Times New Roman', serif;
+  color: var(--roman-gold);
+  font-size: 0.95rem;
+  margin-bottom: 2px;
+}
+
+.modern-date {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Navigation Bar */
+.senate-navbar {
+  background-color: var(--roman-dark);
+  border-bottom: 3px solid var(--roman-gold);
+  box-shadow: 0 4px 8px var(--roman-shadow);
+}
+
+.senate-navbar .nav-link {
+  color: rgba(255, 255, 255, 0.8);
+  font-family: 'Trajan Pro', 'Times New Roman', serif;
+  letter-spacing: 1px;
+  transition: color 0.3s, transform 0.2s;
+}
+
+.senate-navbar .nav-link:hover {
+  color: var(--roman-gold);
+  transform: translateY(-2px);
+}
+
+.dropdown-menu {
+  background-color: var(--roman-papyrus);
+  border: 1px solid var(--roman-gold);
+}
+
+.dropdown-item {
+  color: var(--roman-dark);
+  font-family: 'Palatino Linotype', serif;
+}
+
+.dropdown-item:hover {
+  background-color: rgba(212, 175, 55, 0.2);
+  color: var(--roman-red);
+}
+
+/* Main Content Area */
+.senate-main {
+  background-color: var(--roman-marble);
+  min-height: 60vh;
+}
+
+.roman-scroll {
+  background-color: var(--roman-papyrus);
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px var(--roman-shadow);
+  position: relative;
+  border: 1px solid var(--roman-earth);
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.roman-scroll::before,
+.roman-scroll::after {
+  content: "";
+  position: absolute;
+  height: 100%;
+  width: 20px;
+  top: 0;
+  background: linear-gradient(to right, var(--roman-earth), var(--roman-papyrus));
+  border-radius: 8px 0 0 8px;
+}
+
+.roman-scroll::before {
+  left: 0;
+}
+
+.roman-scroll::after {
+  right: 0;
+  transform: scaleX(-1);
+}
+
+.scroll-content {
+  position: relative;
+  z-index: 1;
+}
+
+/* Todo Card Styling */
+.todo-card {
+  background-color: var(--roman-papyrus);
+  border: 1px solid var(--roman-earth);
+  border-radius: 5px;
+  box-shadow: 0 4px 8px var(--roman-shadow);
+  transition: transform 0.3s, box-shadow 0.3s;
+  overflow: hidden;
+}
+
+.todo-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px var(--roman-shadow);
+}
+
+.todo-card .card-header {
+  background-color: var(--roman-stone);
+  border-bottom: 2px solid var(--roman-earth);
+  padding: 0.75rem;
+}
+
+.todo-title {
+  font-family: 'Trajan Pro', 'Times New Roman', serif;
+  color: var(--roman-dark);
+  font-size: 1.2rem;
+  margin-bottom: 0.75rem;
+}
+
+.todo-description {
+  color: var(--roman-dark);
+  font-style: italic;
+  max-height: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
+
+.sponsor-info {
+  font-size: 0.85rem;
+  color: var(--roman-earth);
+  margin-top: 0.5rem;
+  border-top: 1px dotted var(--roman-stone);
+  padding-top: 0.5rem;
+}
+
+.todo-dates {
+  font-size: 0.75rem;
+  color: var(--roman-earth);
+  margin-top: 0.5rem;
+}
+
+.todo-priority {
+  font-family: 'Trajan Pro', 'Times New Roman', serif;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--roman-dark);
+}
+
+.card-footer {
+  background-color: rgba(212, 175, 55, 0.1);
+  border-top: 1px solid var(--roman-earth);
+}
+
+/* Status Badge Styling */
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.proposed {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.status-badge.approved {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.status-badge.in-progress {
+  background-color: #cce5ff;
+  color: #004085;
+  border: 1px solid #b8daff;
+}
+
+.status-badge.completed {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border: 1px solid #bee5eb;
+}
+
+.status-badge.vetoed {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+}
+
+.status-badge-lg {
+  font-size: 1rem;
+  padding: 6px 12px;
+}
+
+/* Buttons Styling */
+.senate-btn {
+  font-family: 'Trajan Pro', 'Times New Roman', serif;
+  letter-spacing: 0.5px;
+  transition: all 0.3s;
+  border-width: 2px;
+}
+
+.btn-senate {
+  background-color: var(--roman-red);
+  border-color: var(--roman-gold);
+  color: white;
+}
+
+.btn-senate:hover {
+  background-color: var(--roman-dark);
+  border-color: var(--roman-gold);
+  color: var(--roman-gold);
+  transform: translateY(-2px);
+}
+
+/* Headings and Text */
+.roman-heading {
+  font-family: 'Trajan Pro', 'Times New Roman', serif;
+  color: var(--roman-red);
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.roman-heading::after {
+  content: "✦ ✦ ✦";
+  font-size: 0.8rem;
+  color: var(--roman-gold);
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  letter-spacing: 10px;
+}
+
+.senate-decree {
+  font-style: italic;
+  text-align: center;
+  color: var(--roman-dark);
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  padding: 1rem;
+  border-top: 1px solid var(--roman-earth);
+  border-bottom: 1px solid var(--roman-earth);
+}
+
+/* Empty State Styling */
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+}
+
+.scroll-message {
+  background-color: var(--roman-papyrus);
+  padding: 2rem;
+  border-radius: 8px;
+  position: relative;
+  box-shadow: 0 4px 8px var(--roman-shadow);
+  border: 1px solid var(--roman-earth);
+}
+
+.roman-message {
+  font-style: italic;
+  color: var(--roman-dark);
+  font-size: 1.2rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Footer Styling */
+.senate-footer {
+  background-color: var(--roman-dark);
+  color: var(--roman-gold);
+  padding: 1rem 0;
+  border-top: 3px solid var(--roman-gold);
+}
+
+.senate-footer-text {
+  font-family: 'Trajan Pro', 'Times New Roman', serif;
+  letter-spacing: 1px;
+}
+
+/* Task Detail Page */
+.todo-detail {
+  background-color: var(--roman-papyrus);
+  border-radius: 8px;
+  padding: 2rem;
+  box-shadow: 0 4px 15px var(--roman-shadow);
+  border: 1px solid var(--roman-earth);
+}
+
+.detail-header {
+  border-bottom: 2px solid var(--roman-earth);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.sponsor-info-lg {
+  font-style: italic;
+  color: var(--roman-earth);
+}
+
+.scroll-parchment {
+  background-color: var(--roman-papyrus);
+  padding: 1.5rem;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px var(--roman-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.scroll-parchment::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(to bottom, var(--roman-shadow), transparent);
+  opacity: 0.15;
+}
+
+.parchment-content {
+  position: relative;
+  z-index: 1;
+}
+
+.todo-description-lg {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--roman-dark);
+}
+
+.meta-item {
+  margin-bottom: 0.75rem;
+}
+
+.meta-label {
+  font-weight: bold;
+  color: var(--roman-red);
+  margin-right: 0.5rem;
+}
+
+.meta-value {
+  color: var(--roman-dark);
+}
+
+/* Form Styling */
+.senate-form {
+  background-color: var(--roman-papyrus);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 15px var(--roman-shadow);
+  border: 1px solid var(--roman-earth);
+}
+
+.form-label {
+  font-weight: bold;
+  color: var(--roman-red);
+}
+
+.form-control {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--roman-earth);
+  color: var(--roman-dark);
+}
+
+.form-control:focus {
+  background-color: white;
+  border-color: var(--roman-gold);
+  box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
+}
+
+.form-actions {
+  margin-top: 2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--roman-earth);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .senate-title {
+    font-size: 1.8rem;
+  }
+  
+  .senate-subtitle {
+    font-size: 0.9rem;
+  }
+  
+  .roman-scroll, 
+  .todo-detail,
+  .senate-form {
+    padding: 1rem;
+  }
+  
+  .todo-card {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Status Change Buttons */
+.status-buttons .btn {
+  border-width: 2px;
+  font-weight: bold;
+  box-shadow: 0 2px 4px var(--roman-shadow);
+}
+
+/* Animation Effects */
+@keyframes scroll-reveal {
+  0% { opacity: 0; transform: translateY(20px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.todo-card {
+  animation: scroll-reveal 0.5s ease-out forwards;
+}
+
+.todo-card:nth-child(2n) {
+  animation-delay: 0.1s;
+}
+
+.todo-card:nth-child(3n) {
+  animation-delay: 0.2s;
+}
+
+/* Decorative Elements */
+.decorative-column {
+  position: relative;
+  width: 40px;
+  height: 100%;
+}
+
+.decorative-column::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40px;
+  background: linear-gradient(to bottom, var(--roman-gold), var(--roman-stone), var(--roman-gold));
+  opacity: 0.3;
+  border-radius: 20px 20px 0 0;
+}
+
+/* Table styling */
+.senate-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background-color: var(--roman-papyrus);
+  border: 1px solid var(--roman-earth);
+  border-radius: 5px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px var(--roman-shadow);
+}
+
+.senate-table th {
+  background-color: var(--roman-stone);
+  color: var(--roman-dark);
+  font-family: 'Trajan Pro', 'Times New Roman', serif;
+  text-align: left;
+  padding: 12px 15px;
+  border-bottom: 2px solid var(--roman-earth);
+}
+
+.senate-table td {
+  padding: 10px 15px;
+  border-bottom: 1px solid rgba(140, 115, 85, 0.3);
+  color: var(--roman-dark);
+}
+
+.senate-table tr:last-child td {
+  border-bottom: none;
+}
+
+.senate-table tr:hover td {
+  background-color: rgba(212, 175, 55, 0.1);
+} 
