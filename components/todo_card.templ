@@ -16,10 +16,10 @@ templ TodoCard(todo models.Todo) {
 			<p class="card-text todo-description">{ todo.Description }</p>
 			<p class="sponsor-info"><em>Proposed by: { todo.Sponsor }</em></p>
 			<div class="todo-dates">
-				<small>Proposed: { formatDate(todo.CreatedAt) }</small >
+				<small>Proposed: { formatDate(todo.CreatedAt) } </small>
 				if todo.UpdatedAt != todo.CreatedAt {
 					<br/>
-					<small>Updated: { formatDate(todo.UpdatedAt) }</small >
+					<small>Updated: { formatDate(todo.UpdatedAt) }</small>
 				}
 			</div>
 		</div>
