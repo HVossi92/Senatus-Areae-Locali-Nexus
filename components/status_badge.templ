@@ -1,0 +1,15 @@
+package components
+
+import "senatus/models"
+
+// StatusBadge renders a badge for the todo status
+templ StatusBadge(status models.Status) {
+	@statusBadgeWithClass(status, "")
+}
+
+// StatusBadge with additional class
+templ statusBadgeWithClass(status models.Status, additionalClass string) {
+	if displayName, cssClass := getStatusInfo(status); true {
+		<span class={ "status-badge", cssClass, additionalClass }>{ displayName }</span>
+	}
+} 
