@@ -1,0 +1,15 @@
+package components
+
+import "senatus/models"
+
+// Edit Task Form
+templ EditTaskForm(todo models.Todo) {
+	@Layout("Edit Task") {
+		<div class="form-container">
+			<h2 class="roman-heading mb-4">Emendatio Propositionis</h2>
+			<p class="senate-decree mb-4">Amend the details of this proposal for the Senate's consideration.</p>
+			
+			@TaskForm(todo, "/todo/" + todo.ID, "PUT", "Update Proposal")
+		</div>
+	}
+} 

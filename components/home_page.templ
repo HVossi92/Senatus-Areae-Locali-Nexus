@@ -1,0 +1,15 @@
+package components
+
+import "senatus/models"
+
+// HomePage displays the list of todos
+templ HomePage(todos []models.Todo) {
+	@Layout("Tabularium") {
+		<div class="senate-intro mb-4">
+			<h2 class="roman-heading">Tabularium Negotiorum</h2>
+			<p class="senate-decree">By decree of the Senate and People of Rome, all matters of state shall be organized herein.</p>
+		</div>
+		
+		@TodoList(todos)
+	}
+} 

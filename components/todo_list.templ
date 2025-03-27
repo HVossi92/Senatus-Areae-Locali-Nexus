@@ -1,0 +1,25 @@
+package components
+
+import "senatus/models"
+
+// TodoList renders a list of todos
+templ TodoList(todos []models.Todo) {
+	<div class="row" id="todo-list">
+		if len(todos) == 0 {
+			<div class="col-12">
+				<div class="empty-state">
+					<div class="scroll-message">
+						<p class="roman-message">No tasks found in the Senate archives.</p>
+						<p><a href="/new" class="btn btn-primary btn-senate">Propose New Task</a></p >
+					</div>
+				</div>
+			</div>
+		} else {
+			for _, todo := range todos {
+				<div class="col-md-6 col-lg-4 mb-4" id={ "todo-" + todo.ID }>
+					@TodoCard(todo)
+				</div>
+			}
+		}
+	</div>
+} 
