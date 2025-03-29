@@ -32,7 +32,7 @@ func Index(timeSlots []repo.TimeSlotModel) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Senatus Areae Localis Nexus</title><link href=\"/static/bootstrap.min.css\" rel=\"stylesheet\"><link rel=\"stylesheet\" href=\"/static/style.css\"><script src=\"/static/htmx.js\"></script><style>\n  </style></head><body><!-- Header with Roman-inspired design --><header class=\"roman-header py-4 shadow\"><div class=\"container\"><div class=\"row align-items-center\"><div class=\"col-md-8 mb-3 mb-md-0 d-flex align-items-center\"><img src=\"https://via.placeholder.com/50\" alt=\"Roman Senate Logo\" class=\"rounded-circle me-3\" style=\"border: 2px solid var(--roman-gold);\"><h1 class=\"mb-0\">SENATVS AREAE LOCALIS NEXVS</h1></div><div class=\"col-md-4 d-flex justify-content-md-end\"><button class=\"roman-btn btn me-2\">FORVM</button> <button class=\"roman-btn btn\">CIVES</button></div></div></div></header><!-- Main content --><div class=\"container py-5\"><div class=\"card roman-border\"><div class=\"card-header roman-red-bg text-center text-white py-3\"><h2 class=\"mb-1\">CONSVLTATIO POPVLI</h2><p class=\"mb-0 fst-italic\">The People's Consultation</p></div><div class=\"card-body p-4\"><p class=\"text-center mb-4 text-secondary\">Citizens of the Senate, cast your votes on the proposed activities.  The will of the people shall determine our course of action.</p><!-- Add new time slot form at the top --><div class=\"card roman-border mb-5\"><div class=\"card-header roman-red-bg text-white d-flex justify-content-between align-items-center\"><h3 class=\"mb-0\">NEW TIME SLOT</h3><span class=\"badge roman-gold-bg roman-red-text\">PROPOSITIO NOVA</span></div><div class=\"card-body\"><form hx-post=\"/\" hx-target=\"body\" hx-swap=\"outerHTML\"><div class=\"mb-3\"><label for=\"time\" class=\"form-label\">Select Time:</label> <input type=\"time\" id=\"time\" name=\"time\" class=\"form-control\" required></div><div class=\"d-flex justify-content-end\"><button type=\"submit\" class=\"roman-btn btn\">Create Time Slot</button></div></form></div></div><!-- Time slots container --><div id=\"timeslots-container\"><!-- 20:00 Time Slot -->")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<!doctype html><html lang=\"en\"><head><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"><title>Senatus Areae Localis Nexus</title><link href=\"/static/bootstrap.min.css\" rel=\"stylesheet\"><link rel=\"stylesheet\" href=\"/static/style.css\"><script src=\"/static/htmx.js\"></script><link rel=\"icon\" href=\"/static/favicon.ico\" type=\"image/x-icon\"></head><body><!-- Header with Roman-inspired design --><header class=\"roman-header py-4 shadow\"><div class=\"container\"><div class=\"row align-items-center\"><div class=\"col-md-8 mb-3 mb-md-0 d-flex align-items-center\"><h1 class=\"mb-0\">SENATVS AREAE LOCALIS NEXVS</h1></div><div class=\"col-md-4 d-flex justify-content-md-end\"><button class=\"roman-btn btn me-2\">FORVM</button> <button class=\"roman-btn btn\">CIVES</button></div></div></div></header><!-- Main content --><div class=\"container py-5\"><div class=\"card roman-border\"><div class=\"card-header roman-red-bg text-center text-white py-3\"><h2 class=\"mb-1\">CONSVLTATIO POPVLI</h2><p class=\"mb-0 fst-italic\">The People's Consultation</p></div><div class=\"card-body p-4\"><p class=\"text-center mb-4 text-secondary\">Citizens of the Senate, cast your votes on the proposed activities.  The will of the people shall determine our course of action.</p><!-- Add new time slot form at the top --><div class=\"card roman-border mb-5\"><div class=\"card-header roman-red-bg text-white d-flex justify-content-between align-items-center\"><h3 class=\"mb-0\">NEW TIME SLOT</h3><span class=\"badge roman-gold-bg roman-red-text\">PROPOSITIO NOVA</span></div><div class=\"card-body\"><form hx-post=\"/\" hx-target=\"body\" hx-swap=\"outerHTML\"><div class=\"mb-3\"><label for=\"time\" class=\"form-label\">Select Time:</label> <input type=\"time\" id=\"time\" name=\"time\" class=\"form-control\" required></div><div class=\"d-flex justify-content-end\"><button type=\"submit\" class=\"roman-btn btn\">Create Time Slot</button></div></form></div></div><!-- Time slots container --><div id=\"timeslots-container\"><!-- 20:00 Time Slot -->")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -44,7 +44,7 @@ func Index(timeSlots []repo.TimeSlotModel) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(timeSlot.Time)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/templates/index.templ`, Line: 71, Col: 47}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/templates/index.templ`, Line: 70, Col: 47}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {
@@ -57,7 +57,7 @@ func Index(timeSlots []repo.TimeSlotModel) templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(strconv.FormatInt(timeSlot.ID, 10))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/templates/index.templ`, Line: 77, Col: 90}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/templates/index.templ`, Line: 76, Col: 90}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
@@ -75,7 +75,7 @@ func Index(timeSlots []repo.TimeSlotModel) templ.Component {
 				var templ_7745c5c3_Var4 string
 				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(activity.Name)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/templates/index.templ`, Line: 94, Col: 56}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `src/templates/index.templ`, Line: 93, Col: 56}
 				}
 				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
