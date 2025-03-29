@@ -3,7 +3,7 @@ package templates
 import "senatus/src/db/repo"
 import "strconv"
 
-templ Index(timeSlots []repo.TimeSlotModel) {
+templ Index(timeSlots []repo.TimeSlotModel, clientIp string) {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
@@ -35,7 +35,7 @@ templ Index(timeSlots []repo.TimeSlotModel) {
 			<div class="container py-5">
 				<div class="card roman-border">
 					<div class="card-header roman-red-bg text-center text-white py-3">
-						<h2 class="mb-1">CONSVLTATIO POPVLI</h2>
+						<h2 class="mb-1">CONSVLTATIO POPVLI { clientIp }</h2>
 						<p class="mb-0 fst-italic">The People's Consultation</p>
 					</div>
 					<div class="card-body p-4">
@@ -80,14 +80,14 @@ templ Index(timeSlots []repo.TimeSlotModel) {
 											</div>
 										</form>
 									</div>
-									<ul id="activities-20" class="list-group list-group-flush">
+									<ul class="list-group list-group-flush">
 										for _, activity := range timeSlot.Activities {
 											<!-- Leading activity -->
 											<li class="list-group-item leading-activity d-flex align-items-center">
 												<div class="me-3 d-flex flex-column align-items-center">
-													<button class="vote-btn" hx-post="/api/vote" hx-vals='{"timeSlotId": 1, "activityId": 3, "increment": true}' hx-target="#activities-20" hx-swap="innerHTML">▲</button>
-													<span class="vote-count my-1">15</span>
-													<button class="vote-btn" hx-post="/api/vote" hx-vals='{"timeSlotId": 1, "activityId": 3, "increment": false}' hx-target="#activities-20" hx-swap="innerHTML">▼</button>
+													<button class="vote-btn" hx-post="/activities/votes" hx-vals={ getHxVals(activity.ID) } hx-target="body" hx-swap="outerHTML">▲</button>
+													<span class="vote-count my-1">{ strconv.Itoa(len(activity.UpVotes)) }</span>
+													<button disabled class="vote-btn" hx-delete="/activities/votes" hx-vals='{"activityId": activity.ID}' hx-target="body" hx-swap="outerHTML">▼</button>
 												</div>
 												<div class="flex-grow-1">
 													<span class="activity-name">{ activity.Name }</span>
@@ -122,4 +122,8 @@ templ Index(timeSlots []repo.TimeSlotModel) {
   </script>
 		</body>
 	</html>
+}
+
+func getHxVals(activityId int64) string {
+	return `{"activityId": ` + strconv.Itoa(int(activityId)) + `}`
 }

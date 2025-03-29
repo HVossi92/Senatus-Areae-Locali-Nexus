@@ -20,16 +20,28 @@ func (q *Queries) DeleteTimeSlot(ctx context.Context, id int64) error {
 	return err
 }
 
+const downVote = `-- name: DownVote :exec
+DELETE FROM up_votes
+WHERE activity_id = ? AND user = ?
+`
+
+type DownVoteParams struct {
+	ActivityID int64
+	User       string
+}
+
+func (q *Queries) DownVote(ctx context.Context, arg DownVoteParams) error {
+	_, err := q.db.ExecContext(ctx, downVote, arg.ActivityID, arg.User)
+	return err
+}
+
 const getAllTimeSlots = `-- name: GetAllTimeSlots :many
 SELECT ts.id AS time_slot_id,
     ts.time AS time_slot_time,
     a.id AS activity_id,
-    a.name AS activity_name,
-    v.user AS vote_user,
-    v.is_up_vote AS vote_is_up_vote
+    a.name AS activity_name
 FROM time_slots ts
     LEFT JOIN activities a ON ts.id = a.time_slot_id
-    LEFT JOIN votes v ON a.id = v.activity_id
 ORDER BY ts.time
 `
 
@@ -38,8 +50,6 @@ type GetAllTimeSlotsRow struct {
 	TimeSlotTime string
 	ActivityID   sql.NullInt64
 	ActivityName sql.NullString
-	VoteUser     sql.NullString
-	VoteIsUpVote sql.NullInt64
 }
 
 func (q *Queries) GetAllTimeSlots(ctx context.Context) ([]GetAllTimeSlotsRow, error) {
@@ -56,9 +66,35 @@ func (q *Queries) GetAllTimeSlots(ctx context.Context) ([]GetAllTimeSlotsRow, er
 			&i.TimeSlotTime,
 			&i.ActivityID,
 			&i.ActivityName,
-			&i.VoteUser,
-			&i.VoteIsUpVote,
 		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const getUpVotes = `-- name: GetUpVotes :many
+SELECT id, activity_id, user FROM up_votes
+WHERE activity_id = ?
+`
+
+func (q *Queries) GetUpVotes(ctx context.Context, activityID int64) ([]UpVote, error) {
+	rows, err := q.db.QueryContext(ctx, getUpVotes, activityID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []UpVote
+	for rows.Next() {
+		var i UpVote
+		if err := rows.Scan(&i.ID, &i.ActivityID, &i.User); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
@@ -97,18 +133,17 @@ func (q *Queries) InsertTimeSlot(ctx context.Context, time string) error {
 	return err
 }
 
-const vote = `-- name: Vote :exec
-INSERT INTO votes (activity_id, user, is_up_vote)
-VALUES (?, ?, ?)
+const upVote = `-- name: UpVote :exec
+INSERT INTO up_votes (activity_id, user)
+VALUES (?, ?)
 `
 
-type VoteParams struct {
+type UpVoteParams struct {
 	ActivityID int64
 	User       string
-	IsUpVote   int64
 }
 
-func (q *Queries) Vote(ctx context.Context, arg VoteParams) error {
-	_, err := q.db.ExecContext(ctx, vote, arg.ActivityID, arg.User, arg.IsUpVote)
+func (q *Queries) UpVote(ctx context.Context, arg UpVoteParams) error {
+	_, err := q.db.ExecContext(ctx, upVote, arg.ActivityID, arg.User)
 	return err
 }

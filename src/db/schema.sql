@@ -8,10 +8,9 @@ CREATE TABLE IF NOT EXISTS activities (
     time_slot_id INTEGER NOT NULL,
     FOREIGN KEY (time_slot_id) REFERENCES time_slots(id)
 ) STRICT;
-CREATE TABLE IF NOT EXISTS votes (
+CREATE TABLE IF NOT EXISTS up_votes (
     id INTEGER PRIMARY KEY,
     activity_id INTEGER NOT NULL,
     user TEXT NOT NULL,
-    is_up_vote INTEGER NOT NULL CHECK (is_up_vote IN (0, 1)),
     FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE CASCADE
 ) STRICT;

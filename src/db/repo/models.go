@@ -15,9 +15,8 @@ type TimeSlot struct {
 	Time string
 }
 
-type Vote struct {
+type UpVote struct {
 	ID         int64
 	ActivityID int64
 	User       string
-	IsUpVote   int64
 }

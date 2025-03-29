@@ -67,6 +67,11 @@
     .vote-btn:hover {
       color: var(--roman-red);
     }
+
+    .vote-btn:disabled {
+      color: grey;
+      cursor: not-allowed;
+    }
     
     .vote-count {
       font-weight: bold;

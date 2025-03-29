@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"senatus/src/db/repo"
+	"senatus/src/helpers"
 	"senatus/src/templates"
 	"sort"
 	"strconv"
@@ -61,12 +62,19 @@ func main() {
 	http.HandleFunc("GET /", h.handleGetIndex)
 	http.HandleFunc("POST /", h.handleInsertTimeSlot)
 	http.HandleFunc("POST /activities", h.handleInsertActivity)
+	http.HandleFunc("POST /activities/votes", h.handleInsertActivityVote)
 
 	fmt.Println("Server listening on port 8080")
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
 func (h *Handler) handleGetIndex(w http.ResponseWriter, r *http.Request) {
+	fmt.Println(r.RemoteAddr)
+	fmt.Println(r.Proto)
+	fmt.Println(r.ProtoMajor)
+	fmt.Println(r.ProtoMinor)
+	clientIP := r.Header.Get("X-Forwarded-For")
+	fmt.Println(clientIP)
 	rows, err := h.queries.GetAllTimeSlots(h.ctx)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -93,26 +101,21 @@ func (h *Handler) handleGetIndex(w http.ResponseWriter, r *http.Request) {
 
 		// Process Activity if it exists in this row
 		if row.ActivityID.Valid {
-			activity, exists := activityMap[row.ActivityID.Int64]
+			_, exists := activityMap[row.ActivityID.Int64]
 			if !exists {
-				activity = &repo.ActivityModel{
+				upVotes, err := h.queries.GetUpVotes(h.ctx, row.ActivityID.Int64)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusInternalServerError)
+					return
+				}
+				activity := &repo.ActivityModel{
 					ID:         row.ActivityID.Int64,
 					Name:       row.ActivityName.String,
 					TimeSlotID: row.TimeSlotID,
-					Votes:      []repo.VoteModel{},
+					UpVotes:    upVotes,
 				}
 				activityMap[row.ActivityID.Int64] = activity
 				timeSlot.Activities = append(timeSlot.Activities, *activity)
-			}
-
-			// Process Vote if it exists in this row
-			if row.VoteUser.Valid {
-				vote := repo.VoteModel{
-					ActivityID: row.ActivityID.Int64,
-					User:       row.VoteUser.String,
-					IsUpVote:   row.VoteIsUpVote.Int64,
-				}
-				activity.Votes = append(activity.Votes, vote)
 			}
 		}
 	}
@@ -125,7 +128,7 @@ func (h *Handler) handleGetIndex(w http.ResponseWriter, r *http.Request) {
 
 	sortTimeSlotsByTime(timeSlots)
 
-	component := templates.Index(timeSlots)
+	component := templates.Index(timeSlots, helpers.GetClientIp(r))
 	component.Render(r.Context(), w)
 }
 
@@ -167,5 +170,21 @@ func (h *Handler) handleInsertActivity(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
+	h.handleGetIndex(w, r)
+}
+
+func (h *Handler) handleInsertActivityVote(w http.ResponseWriter, r *http.Request) {
+	activityIdString := r.FormValue("activityId")
+	activityId, err := strconv.Atoi(activityIdString)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	upVote := repo.UpVoteParams{
+		ActivityID: int64(activityId),
+		User:       helpers.GetClientIp(r),
+	}
+	h.queries.UpVote(h.ctx, upVote)
 	h.handleGetIndex(w, r)
 }
