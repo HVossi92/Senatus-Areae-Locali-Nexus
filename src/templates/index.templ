@@ -1,96 +1,16 @@
 package templates
 
-templ index() {
+templ Index() {
 	<!DOCTYPE html>
 	<html lang="en">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<title>Senatus Areae Localis Nexus</title>
-			<!-- Bootstrap 5 CSS -->
-			<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"/>
-			<!-- HTMX -->
-			<script src="https://unpkg.com/htmx.org@1.9.2"></script>
-			<!-- Custom CSS -->
+			<link href="/static/bootstrap.min.css" rel="stylesheet"/>
+			<link rel="stylesheet" href="/static/style.css">
+			<script src="/static/htmx.js"></script>
 			<style>
-    :root {
-      --roman-red: #8B0000;
-      --roman-gold: #DAA520;
-      --roman-ivory: #F5F5DC;
-    }
-    
-    body {
-      background-color: #f8f9fa;
-      font-family: 'Times New Roman', Times, serif;
-    }
-    
-    .roman-header {
-      background-color: var(--roman-red);
-      color: var(--roman-ivory);
-    }
-    
-    .roman-gold-text {
-      color: var(--roman-gold);
-    }
-    
-    .roman-red-text {
-      color: var(--roman-red);
-    }
-    
-    .roman-gold-bg {
-      background-color: var(--roman-gold);
-    }
-    
-    .roman-red-bg {
-      background-color: var(--roman-red);
-    }
-    
-    .roman-ivory-bg {
-      background-color: var(--roman-ivory);
-    }
-    
-    .roman-border {
-      border: 2px solid var(--roman-gold) !important;
-    }
-    
-    .roman-btn {
-      background-color: var(--roman-gold);
-      color: var(--roman-red);
-      font-weight: bold;
-    }
-    
-    .roman-btn:hover {
-      background-color: #B8860B;
-      color: var(--roman-red);
-    }
-    
-    .leading-activity {
-      background-color: var(--roman-ivory);
-    }
-    
-    .vote-btn {
-      color: var(--roman-gold);
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      line-height: 1;
-      padding: 0;
-      cursor: pointer;
-    }
-    
-    .vote-btn:hover {
-      color: var(--roman-red);
-    }
-    
-    .vote-count {
-      font-weight: bold;
-      font-size: 1.2rem;
-    }
-    
-    .activity-name {
-      font-family: 'Times New Roman', Times, serif;
-      font-size: 1.2rem;
-    }
   </style>
 		</head>
 		<body>
