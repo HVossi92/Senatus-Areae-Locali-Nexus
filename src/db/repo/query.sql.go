@@ -3,7 +3,7 @@
 //   sqlc v1.28.0
 // source: query.sql
 
-package senatus
+package repo
 
 import (
 	"context"
@@ -38,7 +38,7 @@ type GetAllTimeSlotsRow struct {
 	ActivityID   sql.NullInt64
 	ActivityName sql.NullString
 	VoteUser     sql.NullString
-	VoteIsUpvote sql.NullBool
+	VoteIsUpvote sql.NullInt64
 }
 
 func (q *Queries) GetAllTimeSlots(ctx context.Context) ([]GetAllTimeSlotsRow, error) {
@@ -104,7 +104,7 @@ VALUES (?, ?, ?)
 type VoteParams struct {
 	ActivityID int64
 	User       string
-	IsUpvote   bool
+	IsUpvote   int64
 }
 
 func (q *Queries) Vote(ctx context.Context, arg VoteParams) error {
