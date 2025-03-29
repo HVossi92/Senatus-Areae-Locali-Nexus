@@ -2,7 +2,7 @@
 // versions:
 //   sqlc v1.28.0
 
-package senatus
+package repo
 
 type Activity struct {
 	ID         int64
@@ -19,5 +19,5 @@ type Vote struct {
 	ID         int64
 	ActivityID int64
 	User       string
-	IsUpvote   bool
+	IsUpvote   int64
 }
