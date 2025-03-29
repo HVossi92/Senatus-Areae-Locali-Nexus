@@ -19,5 +19,5 @@ type Vote struct {
 	ID         int64
 	ActivityID int64
 	User       string
-	IsUpvote   int64
+	IsUpVote   int64
 }
