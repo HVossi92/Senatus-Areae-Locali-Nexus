@@ -130,7 +130,7 @@ func Index(timeSlots []repo.TimeSlotModel, clientIp string) templ.Component {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</div></div></div></div><!-- Footer --><footer class=\"roman-red-bg text-white py-3 mt-5\"><div class=\"container text-center\"><p class=\"mb-0\">SENATVS POPVLVSQVE ROMANVS • <span id=\"current-year\"></span></p></div></footer><!-- Bootstrap JS Bundle with Popper --><script src=\"https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js\"></script><!-- Set current year in footer --><script>\n    document.getElementById('current-year').textContent = new Date().getFullYear();\n  </script></body></html>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</div></div></div></div><!-- Footer --><footer class=\"roman-red-bg text-white py-3 mt-5\"><div class=\"container text-center\"><p class=\"mb-0\">SENATVS POPVLVSQVE ROMANVS • <span id=\"current-year\"></span></p></div></footer><!-- Bootstrap JS Bundle with Popper --><!-- Set current year in footer --><script>\n    document.getElementById('current-year').textContent = new Date().getFullYear();\n  </script></body></html>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -64,8 +64,8 @@ func main() {
 	http.HandleFunc("POST /activities", h.handleInsertActivity)
 	http.HandleFunc("POST /activities/votes", h.handleInsertActivityVote)
 
-	fmt.Println("Server listening on port 8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	fmt.Println("Server listening on port 8082")
+	log.Fatal(http.ListenAndServe(":8082", nil))
 }
 
 func (h *Handler) handleGetIndex(w http.ResponseWriter, r *http.Request) {
