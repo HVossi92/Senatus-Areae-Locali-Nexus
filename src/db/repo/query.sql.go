@@ -26,10 +26,11 @@ SELECT ts.id AS time_slot_id,
     a.id AS activity_id,
     a.name AS activity_name,
     v.user AS vote_user,
-    v.is_upvote AS vote_is_upvote
+    v.is_up_vote AS vote_is_up_vote
 FROM time_slots ts
     LEFT JOIN activities a ON ts.id = a.time_slot_id
     LEFT JOIN votes v ON a.id = v.activity_id
+ORDER BY ts.time
 `
 
 type GetAllTimeSlotsRow struct {
@@ -38,7 +39,7 @@ type GetAllTimeSlotsRow struct {
 	ActivityID   sql.NullInt64
 	ActivityName sql.NullString
 	VoteUser     sql.NullString
-	VoteIsUpvote sql.NullInt64
+	VoteIsUpVote sql.NullInt64
 }
 
 func (q *Queries) GetAllTimeSlots(ctx context.Context) ([]GetAllTimeSlotsRow, error) {
@@ -56,7 +57,7 @@ func (q *Queries) GetAllTimeSlots(ctx context.Context) ([]GetAllTimeSlotsRow, er
 			&i.ActivityID,
 			&i.ActivityName,
 			&i.VoteUser,
-			&i.VoteIsUpvote,
+			&i.VoteIsUpVote,
 		); err != nil {
 			return nil, err
 		}
@@ -97,17 +98,17 @@ func (q *Queries) InsertTimeSlot(ctx context.Context, time string) error {
 }
 
 const vote = `-- name: Vote :exec
-INSERT INTO votes (activity_id, user, is_upvote)
+INSERT INTO votes (activity_id, user, is_up_vote)
 VALUES (?, ?, ?)
 `
 
 type VoteParams struct {
 	ActivityID int64
 	User       string
-	IsUpvote   int64
+	IsUpVote   int64
 }
 
 func (q *Queries) Vote(ctx context.Context, arg VoteParams) error {
-	_, err := q.db.ExecContext(ctx, vote, arg.ActivityID, arg.User, arg.IsUpvote)
+	_, err := q.db.ExecContext(ctx, vote, arg.ActivityID, arg.User, arg.IsUpVote)
 	return err
 }

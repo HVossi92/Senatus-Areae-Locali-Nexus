@@ -12,6 +12,6 @@ CREATE TABLE IF NOT EXISTS votes (
     id INTEGER PRIMARY KEY,
     activity_id INTEGER NOT NULL,
     user TEXT NOT NULL,
-    is_upvote INTEGER NOT NULL CHECK (is_upvote IN (0, 1)),
+    is_up_vote INTEGER NOT NULL CHECK (is_up_vote IN (0, 1)),
     FOREIGN KEY (activity_id) REFERENCES activities(id) ON DELETE CASCADE
 ) STRICT;
