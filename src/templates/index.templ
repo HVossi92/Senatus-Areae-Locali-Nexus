@@ -67,6 +67,7 @@ templ Index(timeSlots []repo.TimeSlotModel, clientIp string) {
 									<div class="card-header roman-red-bg text-white d-flex justify-content-between align-items-center">
 										<h3 class="mb-0">Time { timeSlot.Time }</h3>
 										<span class="badge roman-gold-bg roman-red-text">5 ACTIVITIES</span>
+										<button hx-delete="/" hx-vals={ getHxVals("timeSlotId",timeSlot.ID) } hx-target="body" hx-swap="outerHTML" class="roman-delete-btn btn">❌</button>
 									</div>
 									<!-- Add new activity form at the top -->
 									<div class="card-body bg-light border-bottom">
@@ -90,9 +91,9 @@ templ Index(timeSlots []repo.TimeSlotModel, clientIp string) {
 															{{ break }}
 														}
 													}
-													<button class="vote-btn" disabled?={ hasVoted } hx-post="/activities/votes" hx-vals={ getHxVals(activity.ID) } hx-target="body" hx-swap="outerHTML">▲</button>
+													<button class="vote-btn" disabled?={ hasVoted } hx-post="/activities/votes" hx-vals={ getHxVals("activityId",activity.ID) } hx-target="body" hx-swap="outerHTML">▲</button>
 													<span class="vote-count my-1">{ strconv.Itoa(len(activity.UpVotes)) }</span>
-													<button class="vote-btn" disabled?={ !hasVoted } hx-delete="/activities/votes" hx-vals={ getHxVals(activity.ID) } hx-target="body" hx-swap="outerHTML">▼</button>
+													<button class="vote-btn" disabled?={ !hasVoted } hx-delete="/activities/votes" hx-vals={ getHxVals("activityId",activity.ID) } hx-target="body" hx-swap="outerHTML">▼</button>
 												</div>
 												<div class="flex-grow-1">
 													<span class="activity-name">{ activity.Name }</span>
@@ -103,6 +104,7 @@ templ Index(timeSlots []repo.TimeSlotModel, clientIp string) {
 														<path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1 4 11.794z"></path>
 													</svg>
 													<span class="fw-bold small">LEADING</span>
+													<button hx-delete="/activities" hx-vals={ getHxVals("activityId",activity.ID) } hx-target="body" hx-swap="outerHTML" class="roman-delete-btn btn">❌</button>
 												</div>
 											</li>
 										}
@@ -125,6 +127,6 @@ templ Index(timeSlots []repo.TimeSlotModel, clientIp string) {
 	</html>
 }
 
-func getHxVals(activityId int64) string {
-	return `{"activityId": ` + strconv.Itoa(int(activityId)) + `}`
+func getHxVals(field string, id int64) string {
+	return `{"` + field + `": ` + strconv.Itoa(int(id)) + `}`
 }

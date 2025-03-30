@@ -61,7 +61,9 @@ func main() {
 	// Register routes with handler methods
 	http.HandleFunc("GET /", h.handleGetIndex)
 	http.HandleFunc("POST /", h.handleInsertTimeSlot)
+	http.HandleFunc("DELETE /", h.handleDeleteTimeSlot)
 	http.HandleFunc("POST /activities", h.handleInsertActivity)
+	http.HandleFunc("DELETE /activities", h.handleDeleteActivity)
 	http.HandleFunc("POST /activities/votes", h.handleInsertActivityUpVote)
 	http.HandleFunc("DELETE /activities/votes", h.handleInsertActivityDownVote)
 
@@ -158,6 +160,21 @@ func (h *Handler) handleInsertTimeSlot(w http.ResponseWriter, r *http.Request) {
 	h.handleGetIndex(w, r)
 }
 
+func (h *Handler) handleDeleteTimeSlot(w http.ResponseWriter, r *http.Request) {
+	timeSlotIdString := r.FormValue("timeSlotId")
+	timeSlotId, err := strconv.ParseInt(timeSlotIdString, 10, 64)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = h.queries.DeleteTimeSlot(h.ctx, timeSlotId)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	h.handleGetIndex(w, r)
+}
+
 func (h *Handler) handleInsertActivity(w http.ResponseWriter, r *http.Request) {
 	activity := r.FormValue("activity")
 	timeSlot := r.FormValue("timeSlot")
@@ -171,6 +188,21 @@ func (h *Handler) handleInsertActivity(w http.ResponseWriter, r *http.Request) {
 		TimeSlotID: timeSlotId,
 	}
 	err = h.queries.InsertActivity(h.ctx, dto)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	h.handleGetIndex(w, r)
+}
+
+func (h *Handler) handleDeleteActivity(w http.ResponseWriter, r *http.Request) {
+	activityIdString := r.FormValue("activityId")
+	activityId, err := strconv.Atoi(activityIdString)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	err = h.queries.DeleteActivity(h.ctx, int64(activityId))
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

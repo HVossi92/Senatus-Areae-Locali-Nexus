@@ -15,6 +15,9 @@ WHERE id = ?;
 -- name: InsertActivity :exec
 INSERT INTO activities (name, time_slot_id)
 VALUES (?, ?);
+-- name: DeleteActivity :exec
+DELETE FROM activities
+WHERE id = ?;
 -- name: UpVote :exec
 INSERT INTO up_votes (activity_id, user)
 VALUES (?, ?);

@@ -10,6 +10,16 @@ import (
 	"database/sql"
 )
 
+const deleteActivity = `-- name: DeleteActivity :exec
+DELETE FROM activities
+WHERE id = ?
+`
+
+func (q *Queries) DeleteActivity(ctx context.Context, id int64) error {
+	_, err := q.db.ExecContext(ctx, deleteActivity, id)
+	return err
+}
+
 const deleteTimeSlot = `-- name: DeleteTimeSlot :exec
 DELETE FROM time_slots
 WHERE id = ?
