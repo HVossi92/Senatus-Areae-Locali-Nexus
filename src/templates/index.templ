@@ -25,8 +25,7 @@ templ Index(timeSlots []repo.TimeSlotModel, clientIp string) {
 							<h1 class="mb-0">SENATVS AREAE LOCALIS NEXVS</h1>
 						</div>
 						<div class="col-md-4 d-flex justify-content-md-end">
-							<button class="roman-btn btn me-2">FORVM</button>
-							<button class="roman-btn btn">CIVES</button>
+							{ clientIp }
 						</div>
 					</div>
 				</div>
@@ -35,8 +34,7 @@ templ Index(timeSlots []repo.TimeSlotModel, clientIp string) {
 			<div class="container py-5">
 				<div class="card roman-border">
 					<div class="card-header roman-red-bg text-center text-white py-3">
-						<h2 class="mb-1">CONSVLTATIO POPVLI { clientIp }</h2>
-						<p class="mb-0 fst-italic">The People's Consultation</p>
+						<h2 class="mb-1">The LAN's consultation </h2>
 					</div>
 					<div class="card-body p-4">
 						<p class="text-center mb-4 text-secondary">
@@ -111,14 +109,11 @@ templ Index(timeSlots []repo.TimeSlotModel, clientIp string) {
 			<!-- Footer -->
 			<footer class="roman-red-bg text-white py-3 mt-5">
 				<div class="container text-center">
-					<p class="mb-0">SENATVS POPVLVSQVE ROMANVS • <span id="current-year"></span></p>
+					<p class="mb-0">SENATVS AREAE LOCALIS NEXVS </p>
 				</div>
 			</footer>
 			<!-- Bootstrap JS Bundle with Popper -->
 			<!-- Set current year in footer -->
-			<script>
-    document.getElementById('current-year').textContent = new Date().getFullYear();
-  </script>
 		</body>
 	</html>
 }
