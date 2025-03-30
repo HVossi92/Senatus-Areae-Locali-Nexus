@@ -62,7 +62,8 @@ func main() {
 	http.HandleFunc("GET /", h.handleGetIndex)
 	http.HandleFunc("POST /", h.handleInsertTimeSlot)
 	http.HandleFunc("POST /activities", h.handleInsertActivity)
-	http.HandleFunc("POST /activities/votes", h.handleInsertActivityVote)
+	http.HandleFunc("POST /activities/votes", h.handleInsertActivityUpVote)
+	http.HandleFunc("DELETE /activities/votes", h.handleInsertActivityDownVote)
 
 	fmt.Println("Server listening on port 8082")
 	log.Fatal(http.ListenAndServe(":8082", nil))
@@ -123,6 +124,10 @@ func (h *Handler) handleGetIndex(w http.ResponseWriter, r *http.Request) {
 	// Convert map to slice
 	var timeSlots []repo.TimeSlotModel
 	for _, timeSlot := range timeSlotMap {
+		// Sort activities by upvotes (descending order)
+		sort.Slice(timeSlot.Activities, func(i, j int) bool {
+			return len(timeSlot.Activities[i].UpVotes) > len(timeSlot.Activities[j].UpVotes)
+		})
 		timeSlots = append(timeSlots, *timeSlot)
 	}
 
@@ -173,7 +178,7 @@ func (h *Handler) handleInsertActivity(w http.ResponseWriter, r *http.Request) {
 	h.handleGetIndex(w, r)
 }
 
-func (h *Handler) handleInsertActivityVote(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) handleInsertActivityUpVote(w http.ResponseWriter, r *http.Request) {
 	activityIdString := r.FormValue("activityId")
 	activityId, err := strconv.Atoi(activityIdString)
 	if err != nil {
@@ -185,6 +190,30 @@ func (h *Handler) handleInsertActivityVote(w http.ResponseWriter, r *http.Reques
 		ActivityID: int64(activityId),
 		User:       helpers.GetClientIp(r),
 	}
-	h.queries.UpVote(h.ctx, upVote)
+	err = h.queries.UpVote(h.ctx, upVote)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	h.handleGetIndex(w, r)
+}
+
+func (h *Handler) handleInsertActivityDownVote(w http.ResponseWriter, r *http.Request) {
+	activityIdString := r.FormValue("activityId")
+	activityId, err := strconv.Atoi(activityIdString)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	upVote := repo.DownVoteParams{
+		ActivityID: int64(activityId),
+		User:       helpers.GetClientIp(r),
+	}
+	err = h.queries.DownVote(h.ctx, upVote)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
 	h.handleGetIndex(w, r)
 }
