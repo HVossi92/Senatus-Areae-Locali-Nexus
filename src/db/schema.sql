@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS time_slots (
     id INTEGER PRIMARY KEY,
+    name TEXT NOT NULL,
     time TEXT NOT NULL
 ) STRICT;
 CREATE TABLE IF NOT EXISTS activities (

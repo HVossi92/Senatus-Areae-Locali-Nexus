@@ -96,6 +96,7 @@ func (h *Handler) handleGetIndex(w http.ResponseWriter, r *http.Request) {
 		if !exists {
 			timeSlot = &repo.TimeSlotModel{
 				ID:         row.TimeSlotID,
+				Name:       row.TimeSlotName,
 				Time:       row.TimeSlotTime,
 				Activities: []repo.ActivityModel{},
 			}
@@ -152,7 +153,11 @@ func (h *Handler) handleInsertTimeSlot(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, error, http.StatusInternalServerError)
 		return
 	}
-	err := h.queries.InsertTimeSlot(h.ctx, timeSlot)
+	dto := repo.InsertTimeSlotParams{
+		Time: timeSlot,
+		Name: r.FormValue("name"),
+	}
+	err := h.queries.InsertTimeSlot(h.ctx, dto)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

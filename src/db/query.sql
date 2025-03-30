@@ -1,5 +1,6 @@
 -- name: GetAllTimeSlots :many
 SELECT ts.id AS time_slot_id,
+    ts.name AS time_slot_name,
     ts.time AS time_slot_time,
     a.id AS activity_id,
     a.name AS activity_name
@@ -7,8 +8,8 @@ FROM time_slots ts
     LEFT JOIN activities a ON ts.id = a.time_slot_id
 ORDER BY ts.time;
 -- name: InsertTimeSlot :exec
-INSERT INTO time_slots (time)
-VALUES (?);
+INSERT INTO time_slots (time, name)
+VALUES (?, ?);
 -- name: DeleteTimeSlot :exec
 DELETE FROM time_slots
 WHERE id = ?;

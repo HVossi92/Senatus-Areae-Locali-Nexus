@@ -47,6 +47,7 @@ func (q *Queries) DownVote(ctx context.Context, arg DownVoteParams) error {
 
 const getAllTimeSlots = `-- name: GetAllTimeSlots :many
 SELECT ts.id AS time_slot_id,
+    ts.name AS time_slot_name,
     ts.time AS time_slot_time,
     a.id AS activity_id,
     a.name AS activity_name
@@ -57,6 +58,7 @@ ORDER BY ts.time
 
 type GetAllTimeSlotsRow struct {
 	TimeSlotID   int64
+	TimeSlotName string
 	TimeSlotTime string
 	ActivityID   sql.NullInt64
 	ActivityName sql.NullString
@@ -73,6 +75,7 @@ func (q *Queries) GetAllTimeSlots(ctx context.Context) ([]GetAllTimeSlotsRow, er
 		var i GetAllTimeSlotsRow
 		if err := rows.Scan(
 			&i.TimeSlotID,
+			&i.TimeSlotName,
 			&i.TimeSlotTime,
 			&i.ActivityID,
 			&i.ActivityName,
@@ -134,12 +137,17 @@ func (q *Queries) InsertActivity(ctx context.Context, arg InsertActivityParams) 
 }
 
 const insertTimeSlot = `-- name: InsertTimeSlot :exec
-INSERT INTO time_slots (time)
-VALUES (?)
+INSERT INTO time_slots (time, name)
+VALUES (?, ?)
 `
 
-func (q *Queries) InsertTimeSlot(ctx context.Context, time string) error {
-	_, err := q.db.ExecContext(ctx, insertTimeSlot, time)
+type InsertTimeSlotParams struct {
+	Time string
+	Name string
+}
+
+func (q *Queries) InsertTimeSlot(ctx context.Context, arg InsertTimeSlotParams) error {
+	_, err := q.db.ExecContext(ctx, insertTimeSlot, arg.Time, arg.Name)
 	return err
 }
 

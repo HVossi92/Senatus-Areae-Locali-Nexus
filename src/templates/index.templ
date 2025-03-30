@@ -49,9 +49,15 @@ templ Index(timeSlots []repo.TimeSlotModel, clientIp string) {
 							</div>
 							<div class="card-body">
 								<form hx-post="/" hx-target="body" hx-swap="outerHTML">
-									<div class="mb-3">
-										<label for="time" class="form-label">Select Time:</label>
-										<input type="time" id="time" name="time" class="form-control" required/>
+									<div class="mb-3 d-flex">
+										<div class="me-2 flex-grow-1">
+											<label for="time" class="form-label">Select Time:</label>
+											<input type="time" id="time" name="time" class="form-control" required/>
+										</div>
+										<div class="flex-grow-1">
+											<label for="name" class="form-label">Time Slot Name:</label>
+											<input type="text" id="name" name="name" class="form-control" placeholder="Time Slot Name" required/>
+										</div>
 									</div>
 									<div class="d-flex justify-content-end">
 										<button type="submit" class="roman-btn btn">Create Time Slot</button>
@@ -65,9 +71,11 @@ templ Index(timeSlots []repo.TimeSlotModel, clientIp string) {
 							for _, timeSlot := range timeSlots {
 								<div class="card roman-border mb-4">
 									<div class="card-header roman-red-bg text-white d-flex justify-content-between align-items-center">
-										<h3 class="mb-0">Time { timeSlot.Time }</h3>
-										<span class="badge roman-gold-bg roman-red-text">5 ACTIVITIES</span>
-										<button hx-delete="/" hx-vals={ getHxVals("timeSlotId",timeSlot.ID) } hx-target="body" hx-swap="outerHTML" class="roman-delete-btn btn">❌</button>
+										<h3 class="mb-0">{ timeSlot.Name } { timeSlot.Time }</h3>
+										<div class="d-flex align-items-center">
+											<span class="badge roman-gold-bg roman-red-text me-2">{ strconv.Itoa(len(timeSlot.Activities)) } ACTIVITIES</span>
+											<button hx-delete="/" hx-vals={ getHxVals("timeSlotId", timeSlot.ID) } hx-target="body" hx-swap="outerHTML" class="roman-delete-btn btn">❌</button>
+										</div>
 									</div>
 									<!-- Add new activity form at the top -->
 									<div class="card-body bg-light border-bottom">
@@ -91,9 +99,9 @@ templ Index(timeSlots []repo.TimeSlotModel, clientIp string) {
 															{{ break }}
 														}
 													}
-													<button class="vote-btn" disabled?={ hasVoted } hx-post="/activities/votes" hx-vals={ getHxVals("activityId",activity.ID) } hx-target="body" hx-swap="outerHTML">▲</button>
+													<button class="vote-btn" disabled?={ hasVoted } hx-post="/activities/votes" hx-vals={ getHxVals("activityId", activity.ID) } hx-target="body" hx-swap="outerHTML">▲</button>
 													<span class="vote-count my-1">{ strconv.Itoa(len(activity.UpVotes)) }</span>
-													<button class="vote-btn" disabled?={ !hasVoted } hx-delete="/activities/votes" hx-vals={ getHxVals("activityId",activity.ID) } hx-target="body" hx-swap="outerHTML">▼</button>
+													<button class="vote-btn" disabled?={ !hasVoted } hx-delete="/activities/votes" hx-vals={ getHxVals("activityId", activity.ID) } hx-target="body" hx-swap="outerHTML">▼</button>
 												</div>
 												<div class="flex-grow-1">
 													<span class="activity-name">{ activity.Name }</span>
@@ -104,7 +112,7 @@ templ Index(timeSlots []repo.TimeSlotModel, clientIp string) {
 														<path d="M4 11.794V16l4-1 4 1v-4.206l-2.018.306L8 13.126 6.018 12.1 4 11.794z"></path>
 													</svg>
 													<span class="fw-bold small">LEADING</span>
-													<button hx-delete="/activities" hx-vals={ getHxVals("activityId",activity.ID) } hx-target="body" hx-swap="outerHTML" class="roman-delete-btn btn">❌</button>
+													<button hx-delete="/activities" hx-vals={ getHxVals("activityId", activity.ID) } hx-target="body" hx-swap="outerHTML" class="roman-delete-btn btn">❌</button>
 												</div>
 											</li>
 										}

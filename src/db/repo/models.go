@@ -12,6 +12,7 @@ type Activity struct {
 
 type TimeSlot struct {
 	ID   int64
+	Name string
 	Time string
 }
 

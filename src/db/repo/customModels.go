@@ -2,6 +2,7 @@ package repo
 
 type TimeSlotModel struct {
 	ID         int64
+	Name       string
 	Time       string
 	Activities []ActivityModel
 }
